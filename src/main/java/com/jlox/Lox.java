@@ -17,8 +17,6 @@ public class Lox {
             System.out.println("Usage: jlox [script]");
             System.exit(64);
         } else if (args.length == 1) {
-            if(hadError) System.exit(65);
-
              runFile(args[0]);
         } else {
              runPrompt();
@@ -27,7 +25,9 @@ public class Lox {
 
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
-        // run(new String(bytes, Charset.defaultCharset());
+        if(hadError) System.exit(65);
+
+         run(new String(bytes, Charset.defaultCharset()));
     }
 
     private static void runPrompt() throws IOException {
