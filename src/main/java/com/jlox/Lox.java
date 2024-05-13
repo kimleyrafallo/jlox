@@ -40,7 +40,8 @@ public class Lox {
             System.out.print("> ");
             String line = reader.readLine();
             if(line == null) break;
-            // run(line);
+            run(line);
+            hadError = false;
         }
     }
 
