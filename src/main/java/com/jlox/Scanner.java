@@ -73,7 +73,12 @@ public class Scanner {
                 break;
             case '"': string(); break;
             default:
-                Lox.error(line, "Unexpexted character.");
+                if(isDigit(c)){
+                    number();
+                } else {
+                    Lox.error(line, "Unexpexted character.");
+
+                }
                 break;
         }
     }
@@ -120,5 +125,25 @@ public class Scanner {
 
         String value = source.substring(start + 1, current -1);
         addToken(STRING, value);
+    }
+
+    private boolean isDigit(char c){
+        return c >= '0' && c <= '9';
+    }
+
+    private void number(){
+        while(isDigit(peek())) advance();
+
+        if(peek() == '.' && isDigit(peekNext())){
+            advance();
+            while(isDigit(peek())) advance();
+        }
+
+        addToken(NUMBER, Double.parseDouble(source.substring(start, current)));
+    }
+
+    private char peekNext(){
+        if (current + 1 >= source.length()) return '\0';
+        return source.charAt(current + 1);
     }
 }
