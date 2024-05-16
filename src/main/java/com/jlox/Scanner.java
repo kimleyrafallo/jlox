@@ -214,19 +214,17 @@ public class Scanner {
     }
 
     private void skipMultilineComment(){
-        while((peek() != '/')|| (peek() != '*')){
+        while((peek() != '*') && (peek() != '/')){
             if(isAtEnd()) return;
             advance();
         }
 
-        if(peek() == '*' && peekNext() == '/'){
-            advance();
+        if(match('*') && peek() == '/'){
             advance();
         }
 
-        if(peek() == '/' && peekNext() == '*'){
+        if(match('/') && peek() == '*') {
             skipMultilineComment();
         }
-
     }
 }
