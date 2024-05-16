@@ -57,17 +57,37 @@ public class Scanner {
     private void scanToken(){
         char c = advance();
 
-        switch (c){
-            case '(': addToken(LEFT_PAREN); break;
-            case ')': addToken(RIGHT_PAREN); break;
-            case '{': addToken(RIGHT_BRACE); break;
-            case '}': addToken(LEFT_BRACE); break;
-            case ',': addToken(COMMA); break;
-            case '.': addToken(DOT); break;
-            case '-': addToken(MINUS); break;
-            case '+': addToken(PLUS); break;
-            case ';': addToken(SEMICOLON); break;
-            case '*': addToken(STAR); break;
+        switch (c) {
+            case '(':
+                addToken(LEFT_PAREN);
+                break;
+            case ')':
+                addToken(RIGHT_PAREN);
+                break;
+            case '{':
+                addToken(RIGHT_BRACE);
+                break;
+            case '}':
+                addToken(LEFT_BRACE);
+                break;
+            case ',':
+                addToken(COMMA);
+                break;
+            case '.':
+                addToken(DOT);
+                break;
+            case '-':
+                addToken(MINUS);
+                break;
+            case '+':
+                addToken(PLUS);
+                break;
+            case ';':
+                addToken(SEMICOLON);
+                break;
+            case '*':
+                addToken(STAR);
+                break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
@@ -81,8 +101,10 @@ public class Scanner {
                 addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
             case '/':
-                if(match('/')){
-                    while(peek() != '\n' && !isAtEnd()) advance();
+                if (match('/')) {
+                    while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+                    skipMultilineComment();
                 } else {
                     addToken(SLASH);
                 }
@@ -189,5 +211,22 @@ public class Scanner {
 
     private boolean isAlphaNumeric(char c){
         return isAlpha(c) || isDigit(c);
+    }
+
+    private void skipMultilineComment(){
+        while((peek() != '/')|| (peek() != '*')){
+            if(isAtEnd()) return;
+            advance();
+        }
+
+        if(peek() == '*' && peekNext() == '/'){
+            advance();
+            advance();
+        }
+
+        if(peek() == '/' && peekNext() == '*'){
+            skipMultilineComment();
+        }
+
     }
 }
